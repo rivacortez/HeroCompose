@@ -52,4 +52,23 @@ class HeroRepository(
     suspend fun deleteHero(hero: Hero) = withContext(Dispatchers.IO) {
         heroDao.delete(HeroEntity(hero.id, hero.name, hero.fullName, hero.poster))
     }
+
+
+    suspend fun getFavoriteHeroes(): Resource<List<Hero>> = withContext(Dispatchers.IO) {
+        try {
+            val heroEntities = heroDao.fetchAllHeroes()
+            val heroes = heroEntities.map { entity ->
+                Hero(
+                    id = entity.id,
+                    name = entity.name,
+                    fullName = entity.fullName,
+                    poster = entity.url,
+                    isFavorite = true
+                )
+            }
+            Resource.Success(heroes)
+        } catch (e: Exception) {
+            Resource.Error(message = e.localizedMessage ?: "An error occurred")
+        }
+    }
 }

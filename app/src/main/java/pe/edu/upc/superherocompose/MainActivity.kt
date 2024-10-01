@@ -28,6 +28,8 @@ import pe.edu.upc.superherocompose.data.local.AppDatabase
 import pe.edu.upc.superherocompose.data.remote.HeroService
 import pe.edu.upc.superherocompose.data.repository.HeroRepository
 import pe.edu.upc.superherocompose.domain.Hero
+import pe.edu.upc.superherocompose.presentation.Hero.HeroScreen
+import pe.edu.upc.superherocompose.presentation.Hero.HeroViewModel
 import pe.edu.upc.superherocompose.presentation.HeroListScreen
 import pe.edu.upc.superherocompose.presentation.HeroListViewModel
 import pe.edu.upc.superherocompose.ui.theme.SuperHeroComposeTheme
@@ -48,7 +50,7 @@ class MainActivity : ComponentActivity() {
         val dao = Room
             .databaseBuilder(applicationContext, AppDatabase::class.java, "heroes-db")
             .build()
-            .getHeroDao()// Cambié el nombre del método para acceder al DAO de héroes
+            .getHeroDao()
 
         val repository = HeroRepository(service, dao)
 
@@ -91,11 +93,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         if (index.value == 0) {
-                            val heroViewModel = HeroListViewModel(repository)
-                            HeroListScreen(heroViewModel)  // Pantalla de búsqueda de héroes
-                        } else {
                             val heroListViewModel = HeroListViewModel(repository)
-                            HeroListScreen(heroListViewModel)  // Pantalla de favoritos de héroes
+                            HeroListScreen(heroListViewModel)
+                        } else {
+                            val heroViewModel = HeroViewModel(repository)
+                            HeroScreen(heroViewModel)
                         }
                     }
                 }
